@@ -11,6 +11,7 @@ import (
 )
 
 func getUserInput() {
+
 	// Get Namespace / App Name
 	fmt.Println("Enter the namespace for the app (excluding prod/stage):")
 	inputReader := bufio.NewReader(os.Stdin)
@@ -78,8 +79,13 @@ func getUserInput() {
 }
 
 func replaceText(appName string) {
-	err := cp.Copy("github.com/pravinbanjade/k8s-config-generator/template", "./generated-k8s-config")
-	fmt.Println(err)
+	path, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	path = path + "/generated-k8s-config"
+	error := cp.Copy("./template", path)
+	fmt.Println(error)
 	fmt.Println("Your app name is:", appName)
 	filePath := "./base/service-account.yaml"
 	fileData, _ := ioutil.ReadFile(filePath)
