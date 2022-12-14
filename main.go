@@ -74,7 +74,7 @@ func getUserInput() {
 
 }
 
-func makeDir() {
+func makeDir_NodeTemplate() {
 	err := os.Mkdir(appName, 0755)
 	if err != nil {
 		fmt.Println(err)
@@ -101,7 +101,7 @@ func makeDir() {
 	}
 }
 
-func importYamlFile(yamlUrl string) {
+func importYamlFile_NodeTemplate(yamlUrl string) {
 	// Import template YAML file
 	resp, err := http.Get(yamlUrl)
 	if err != nil {
@@ -117,17 +117,25 @@ func importYamlFile(yamlUrl string) {
 		return
 	}
 
-	replacePlaceholder(string(yamlTemplate))
+	replacePlaceholder_NodeTemplate(string(yamlTemplate), yamlUrl)
 }
 
-func replacePlaceholder(yamlTemplate string) {
+func replacePlaceholder_NodeTemplate(yamlTemplate, yamlUrl string) {
 	// Replace placeholders in template with user input
-	yaml := strings.Replace(yamlTemplate, "{{serviceName}}", appName, -1)
-	yaml = strings.Replace(yaml, "{{appName}}", appName, -1)
-	yaml = strings.Replace(yaml, "{{targetPort}}", containerPort, -1)
+	yaml := strings.Replace(yamlTemplate, "{{appName}}", appName, -1)
+	yaml = strings.Replace(yaml, "{{imageName}}", imageName, -1)
+	yaml = strings.Replace(yaml, "{{imageTagProd}}", imageTagProd, -1)
+	yaml = strings.Replace(yaml, "{{imageTagStage}}", imageTagStage, -1)
+	yaml = strings.Replace(yaml, "{{containerPort}}", containerPort, -1)
+	yaml = strings.Replace(yaml, "{{ingressHostProd}}", ingressHostProd, -1)
+	yaml = strings.Replace(yaml, "{{ingressSecretKeyProd}}", ingressSecretKeyProd, -1)
+	yaml = strings.Replace(yaml, "{{ingressHostStage}}", ingressHostStage, -1)
+	yaml = strings.Replace(yaml, "{{ingressSecretKeyStage}}", ingressSecretKeyStage, -1)
+
+	filterYamlUrl := strings.Replace(yamlUrl, "https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs", "", -1)
 
 	// Write generated YAML to file
-	err := ioutil.WriteFile(appName+"/base/common/service-account.yaml", []byte(yaml), 0644)
+	err := ioutil.WriteFile(appName+filterYamlUrl, []byte(yaml), 0644)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -150,9 +158,24 @@ func nodeConfig() {
 	fmt.Println("Your Staging domain is:", ingressHostStage)
 	fmt.Println("Your Staging secret key is:", ingressSecretKeyStage)
 
-	makeDir()
+	makeDir_NodeTemplate()
 
-	importYamlFile("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/base/common/service-account.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/base/common/service-account.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/base/webserver/deployment.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/base/webserver/service.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/base/kustomization.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/base/resource-quota.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/base/vpa.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/production/config.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/production/ingress.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/production/kustomization.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/production/namespace.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/production/secret.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/staging/config.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/staging/ingress.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/staging/kustomization.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/staging/namespace.yaml")
+	importYamlFile_NodeTemplate("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/staging/secret.yaml")
 
 }
 
