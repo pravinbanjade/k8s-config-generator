@@ -3,16 +3,25 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"strings"
 )
 
 func main() {
 	// Import template YAML file
-	yamlTemplate, err := ioutil.ReadFile("https://github.com/pravinbanjade/k8s-config-generator/template.yaml")
+	resp, err := http.Get("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/template.yaml")
+	if err != nil {
+		// Handle the error
+		fmt.Println(err)
+		return
+	}
+	defer resp.Body.Close()
+
+	yamlTemplate, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		return
 	}
 
 	// Get user input
