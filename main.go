@@ -74,6 +74,66 @@ func getUserInput() {
 
 }
 
+func makeDir() {
+	err := os.Mkdir(appName, 0755)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = os.Mkdir(appName+"/base", 0755)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = os.Mkdir(appName+"/base/common", 0755)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = os.Mkdir(appName+"/base/webserver", 0755)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = os.Mkdir(appName+"/production", 0755)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = os.Mkdir(appName+"/staging", 0755)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func importYamlFile(yamlUrl string) {
+	// Import template YAML file
+	resp, err := http.Get(yamlUrl)
+	if err != nil {
+		// Handle the error
+		fmt.Println(err)
+		return
+	}
+	defer resp.Body.Close()
+
+	yamlTemplate, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	replacePlaceholder(string(yamlTemplate))
+}
+
+func replacePlaceholder(yamlTemplate string) {
+	// Replace placeholders in template with user input
+	yaml := strings.Replace(yamlTemplate, "{{serviceName}}", appName, -1)
+	yaml = strings.Replace(yaml, "{{appName}}", appName, -1)
+	yaml = strings.Replace(yaml, "{{targetPort}}", containerPort, -1)
+
+	// Write generated YAML to file
+	err := ioutil.WriteFile(appName+"/base/common/service-account.yaml", []byte(yaml), 0644)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+
 func nodeConfig() {
 	fmt.Println("node")
 
@@ -90,37 +150,10 @@ func nodeConfig() {
 	fmt.Println("Your Staging domain is:", ingressHostStage)
 	fmt.Println("Your Staging secret key is:", ingressSecretKeyStage)
 
-	// Import template YAML file
-	resp, err := http.Get("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/template.yaml")
-	if err != nil {
-		// Handle the error
-		fmt.Println(err)
-		return
-	}
-	defer resp.Body.Close()
+	makeDir()
 
-	yamlTemplate, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	importYamlFile("https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs/base/common/service-account.yaml")
 
-	// Replace placeholders in template with user input
-	yaml := strings.Replace(string(yamlTemplate), "{{serviceName}}", appName, -1)
-	yaml = strings.Replace(yaml, "{{appName}}", appName, -1)
-	yaml = strings.Replace(yaml, "{{targetPort}}", containerPort, -1)
-
-	err = os.Mkdir(appName, 0755)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// Write generated YAML to file
-	err = ioutil.WriteFile(appName+"/service.yaml", []byte(yaml), 0644)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
 }
 
 func laravelConfig() {
