@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{appName}}-node
+  labels:
+    tier: webserver
+    layer: node
+spec:
+  selector:
+    matchLabels:
+      tier: webserver
+      layer: node
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 25%
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        tier: webserver
+        layer: node
+    spec:
+      serviceAccountName: {{appName}}
+      imagePullSecrets:
+        - name: gitlab-credentials
+      containers:
+      - name: {{appName}}-node
+        envFrom:
+          - configMapRef:
+              name: {{appName}}
+          - secretRef:
+              name: {{appName}}
+        image: {{imageName}}
+#        resources:
+#          requests:
+#            memory: "100Mi"
+#            cpu: "10m"
+#          limits:
+#            memory: "256Mi"
+#            cpu: "50m"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: {{containerPort}}
+          name: http-port
+        securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false

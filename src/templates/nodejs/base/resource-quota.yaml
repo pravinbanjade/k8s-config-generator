@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: {{appName}}-quota
+spec:
+  hard:
+    limits.cpu: "200m"
+    limits.memory: "512Mi"
+    requests.cpu: "200m"
+    requests.memory: "512Mi"
+

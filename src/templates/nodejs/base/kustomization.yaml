@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- common/gitlab-credentials.yaml
+- common/service-account.yaml
+- webserver/deployment.yaml
+- webserver/service.yaml
+- vpa.yaml

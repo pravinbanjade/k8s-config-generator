@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{appName}}-ingress
+
+spec:
+  tls:
+    - hosts:
+        - {{ingressHostStage}}
+      secretName: {{ingressSecretKeyStage}}
+
+  rules:
+    - host: {{ingressHostStage}}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{appName}}
+                port:
+                  number: {{containerPort}}
+  ingressClassName: nginx

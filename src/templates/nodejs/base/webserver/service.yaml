@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{appName}}
+spec:
+  ports:
+    - port: {{containerPort}}
+      targetPort: http-port
+      protocol: TCP
+  selector:
+    tier: webserver
+    layer: node
