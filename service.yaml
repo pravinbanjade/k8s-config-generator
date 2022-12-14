@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fdfd
+  labels:
+    app: sdsdf
+spec:
+  type: LoadBalancer
+  selector:
+    app: sdsdf
+  ports:
+  - name: http
+    port: 80
+    targetPort: 2233
