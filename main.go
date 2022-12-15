@@ -135,7 +135,7 @@ func replacePlaceholder_NodeTemplate(yamlTemplate, yamlUrl string) {
 	filterYamlUrl := strings.Replace(yamlUrl, "https://raw.githubusercontent.com/pravinbanjade/k8s-config-generator/main/src/templates/nodejs", "", -1)
 
 	// Write generated YAML to file
-	err := ioutil.WriteFile(appName+filterYamlUrl, []byte(yaml), 0644)
+	err := os.WriteFile(appName+filterYamlUrl, []byte(yaml), 0644)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
