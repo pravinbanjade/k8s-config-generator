@@ -31,7 +31,7 @@ changelog:
       - '^preview:'
 nfpms:
 - maintainer: Pravin Banjade <pravinbanjade9@gmail.com>
-  description: wordle cli.
+  description: Kubernetes Config Generator
   homepage: https://github.com/pravinbanjade
   license: MIT
   formats:
