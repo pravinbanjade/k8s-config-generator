@@ -25,7 +25,7 @@ move `kcg` binary to `/usr/local/bin` to use the command from anywhere
 ```
 sudo mv kcg /usr/local/bin/kcg
 ```
-### For intel series
+### For intel series - mac os
 Download the binary and install it into your `/usr/local/bin` directory
 ```
 curl -L -o kcg.tar.gz https://github.com/pravinbanjade/k8s-config-generator/releases/download/v0.0.6/k8s-config-generator_0.0.6_Linux_x86_64.tar.gz
