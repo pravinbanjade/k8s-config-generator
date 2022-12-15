@@ -1,4 +1,4 @@
-module github.com/pravinbanjade/k8s-config-generator
+module github.com/pravinbanjade/kcg
 
 go 1.17
 
