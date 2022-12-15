@@ -11,6 +11,7 @@ builds:
       - linux
       - windows
       - darwin
+    binary: kcg
 archives:
   - replacements:
       darwin: Darwin
@@ -32,7 +33,7 @@ changelog:
 nfpms:
 - maintainer: Pravin Banjade <pravinbanjade9@gmail.com>
   description: Kubernetes Config Generator
-  homepage: https://github.com/pravinbanjade
+  homepage: https://github.com/pravinbanjade/k8s-config-generator
   license: MIT
   formats:
   - deb
