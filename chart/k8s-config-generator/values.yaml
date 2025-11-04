@@ -1,0 +1,124 @@
+# Default values for k8s-config-generator
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+
+image:
+  repository: ""
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+# - name: gitlab-credentials
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  privileged: false
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+containerPort: 3000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: ""
+  #    hosts:
+  #      - ""
+
+resources: {}
+  # limits:
+  #   cpu: 200m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 200m
+  #   memory: 512Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+  metrics: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+strategy: {}
+  # type: RollingUpdate
+  # rollingUpdate:
+  #   maxSurge: 50%
+  #   maxUnavailable: 25%
+
+env: []
+# - name: APP_ENV
+#   value: "production"
+
+envFrom: []
+# - configMapRef:
+#     name: myapp
+# - secretRef:
+#     name: myapp
+
+configMap:
+  enabled: false
+  data: {}
+    # APP_ENV: "production"
+
+secret:
+  enabled: false
+  stringData: {}
+    # APP_KEY: ""
+  # data: {}
+
+resourceQuota:
+  enabled: false
+  hard:
+    limits.cpu: "200m"
+    limits.memory: "512Mi"
+    requests.cpu: "200m"
+    requests.memory: "512Mi"
+
+vpa:
+  enabled: false
+  updatePolicy:
+    updateMode: "Auto"
+
+livenessProbe: {}
+readinessProbe: {}
+
+namespace:
+  create: true
+  name: ""
+  annotations: {}
+

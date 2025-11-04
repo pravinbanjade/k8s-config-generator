@@ -1,0 +1,12 @@
+{{- if and .Values.namespace.create .Values.namespace.name }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespace.name }}
+  labels:
+    {{- include "k8s-config-generator.labels" . | nindent 4 }}
+  {{- with .Values.namespace.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

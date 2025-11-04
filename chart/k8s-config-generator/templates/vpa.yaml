@@ -1,0 +1,24 @@
+{{- if .Values.vpa.enabled -}}
+apiVersion: autoscaling.k8s.io/v1beta2
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "k8s-config-generator.fullname" . }}-node-vpa
+  {{- if .Values.namespace.name }}
+  namespace: {{ .Values.namespace.name }}
+  {{- end }}
+  labels:
+    {{- include "k8s-config-generator.labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: {{ include "k8s-config-generator.fullname" . }}-node
+  {{- if .Values.vpa.updatePolicy }}
+  updatePolicy:
+    {{- toYaml .Values.vpa.updatePolicy | nindent 4 }}
+  {{- else }}
+  updatePolicy:
+    updateMode: "Auto"
+  {{- end }}
+{{- end }}
+

@@ -1,0 +1,17 @@
+{{- if .Values.resourceQuota.enabled -}}
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: {{ include "k8s-config-generator.fullname" . }}-quota
+  {{- if .Values.namespace.name }}
+  namespace: {{ .Values.namespace.name }}
+  {{- end }}
+  labels:
+    {{- include "k8s-config-generator.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.resourceQuota.hard }}
+  hard:
+    {{- toYaml .Values.resourceQuota.hard | nindent 4 }}
+  {{- end }}
+{{- end }}
+

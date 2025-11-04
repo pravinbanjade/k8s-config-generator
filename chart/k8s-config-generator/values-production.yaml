@@ -1,0 +1,28 @@
+# Production environment values
+namespace:
+  create: true
+  name: ""
+
+image:
+  tag: ""
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+configMap:
+  enabled: true
+  data:
+    APP_ENV: "production"
+
+secret:
+  enabled: true
+  stringData:
+    APP_KEY: ""
+

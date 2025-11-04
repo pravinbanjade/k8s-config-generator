@@ -1,0 +1,7 @@
+apiVersion: v2
+name: k8s-config-generator
+description: A Helm chart for Kubernetes application deployment
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
